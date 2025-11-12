@@ -5,11 +5,9 @@
     "license": "MIT",
     "scripts": {
         "dev": "tsnd --respawn --transpile-only --exit-child src/app.ts",
-        "migrate": "npx sequelize-cli db:migrate",
-        "seed": "npx sequelize-cli db:seed:all",
         "build": "tsc -p tsconfig.json",
         "start": "node dist/app.js",
-        "pretty": "bun prettier src --write && bun prettier models --write && bun prettier migrations --write"
+        "pretty": "bun prettier src --write"
     },
     "dependencies": {
         "@fastify/cors": "^11.1.0",
