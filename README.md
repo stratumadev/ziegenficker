@@ -1,4 +1,4 @@
-### Multi Util Backend
+# Ziegenficker - Multi Util Backend
 Includes:
 - Crunchyroll RSS
 - Discord Bot
