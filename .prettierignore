@@ -1,0 +1,22 @@
+# Build
+dist
+
+# Local
+.vscode
+.idea
+.DS_Store
+node_modules
+logs
+ffmpeg
+mkvmerge
+fonts
+*.json
+*.md
+*.yaml
+!package.json
+!tsconfig.json
+docker-compose.yml
+
+# Auto generated
+docs
+

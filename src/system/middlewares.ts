@@ -1,2 +1,1 @@
-export const middlewares = async () => {
-}
+export const middlewares = async () => {}

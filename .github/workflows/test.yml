@@ -1,0 +1,53 @@
+name: Style and build test
+
+on:
+    push:
+        branches: [master]
+    pull_request:
+        branches: [master]
+
+jobs:
+    tsc:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            - uses: oven-sh/setup-bun@v2
+              with:
+                  version: latest
+            - name: Set up Node.js
+              uses: actions/setup-node@v3
+              with:
+                  node-version: 24
+                  check-latest: true
+            - run: bun i
+            - run: bunx tsc
+    prettier:
+        needs: tsc
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            - uses: oven-sh/setup-bun@v2
+              with:
+                  version: latest
+            - name: Set up Node.js
+              uses: actions/setup-node@v3
+              with:
+                  node-version: 24
+                  check-latest: true
+            - run: bun i
+            - run: bun run prettier:scan
+    build-test:
+        needs: [prettier, tsc]
+        runs-on: macos-latest
+        steps:
+            - uses: actions/checkout@v2
+            - uses: oven-sh/setup-bun@v2
+              with:
+                  version: latest
+            - name: Set up Node.js
+              uses: actions/setup-node@v3
+              with:
+                  node-version: 24
+                  check-latest: true
+            - run: bun i
+            - run: bun run build
