@@ -2,7 +2,6 @@ import { server } from '../../app'
 import { CrunchyrollEpisodes, CrunchyrollLogin } from '../../types/modules/crunchy'
 import LogHandler from '../../utils/msg'
 import RequestHandler from '../../utils/req'
-import 'dotenv/config'
 import crypto from 'crypto'
 import { XMLBuilder } from 'fast-xml-parser'
 import { Agent } from 'undici'
@@ -10,7 +9,6 @@ import { Agent } from 'undici'
 export default class Crunchyroll {
     private req = new RequestHandler()
     private msg = new LogHandler()
-    private refresh: string | undefined
     private langobj: {
         [key: string]: string
     } = {
@@ -42,62 +40,13 @@ export default class Crunchyroll {
         'th-TH': 'Thai'
     }
 
-    private async getAuthRefresh() {
-        if (!this.refresh) return
-
-        const body = new URLSearchParams()
-        body.append('refresh_token', this.refresh ?? '')
-        body.append('grant_type', 'refresh_token')
-        body.append('device_name', 'iPhone')
-        body.append('device_type', 'iPhone 13')
-        body.append('device_id', '531a2c2b-526b-439f-8723-d28feb9e6685')
-
-        const auth = await this.req.fetch<CrunchyrollLogin>('https://www.crunchyroll.com/auth/v1/token', {
-            method: 'POST',
-            headers: {
-                Authorization: `Basic bGtlc2k3c25zeTlvb2ptaTJyOWg6LWFHRFhGRk5UbHVaTUxZWEVSbmdOWW5FanZnSDVvZHY=`,
-                'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
-                'User-Agent': 'Crunchyroll/ANDROIDTV/3.49.1_22281 (Android 12; en-US; SHIELD Android TV Build/SR1A.211012.001)'
-            },
-            body: body.toString()
-        })
-
-        if (!auth || !auth.access_token) {
-            this.refresh = undefined
-            this.msg.errorConsoleLog('Login', 'Failed to Login to Crunchy', 'Recheck Email/Password and try again')
-            return
-        }
-
-        server.cache.set('crunchyAuth', auth, auth.expires_in - 30)
-        this.refresh = auth.refresh_token
-
-        return auth
-    }
-
     private async getAuth() {
         const cachedAuth: CrunchyrollLogin | undefined = server.cache.get('crunchyAuth')
-
         if (cachedAuth) return cachedAuth
 
-        if (this.refresh) {
-            const refreshAuth = await this.getAuthRefresh()
-
-            if (refreshAuth) return refreshAuth
-        }
-
-        if (!process.env.CR_EMAIL || !process.env.CR_PASSWORD) {
-            this.msg.errorConsoleLog('Failed to Login to Crunchy')
-            return
-        }
-
         const body = new URLSearchParams()
-        body.append('username', process.env.CR_EMAIL)
-        body.append('password', process.env.CR_PASSWORD)
-        body.append('grant_type', 'password')
-        body.append('scope', 'offline_access')
-        body.append('device_name', 'iPhone')
-        body.append('device_type', 'iPhone 13')
-        body.append('device_id', '531a2c2b-526b-439f-8723-d28feb9e6685')
+        body.append('grant_type', 'client_id')
+        body.append('device_id', '581a2c2b-526b-439f-8723-d28feb9e6685')
 
         const auth = await this.req.fetch<CrunchyrollLogin>('https://www.crunchyroll.com/auth/v1/token', {
             method: 'POST',
@@ -108,15 +57,12 @@ export default class Crunchyroll {
             },
             body: body.toString()
         })
-
         if (!auth || !auth.access_token) {
             this.msg.errorConsoleLog('Failed to Login to Crunchy')
             return
         }
 
         server.cache.set('crunchyAuth', auth, auth.expires_in - 30)
-        this.refresh = auth.refresh_token
-
         return auth
     }
 

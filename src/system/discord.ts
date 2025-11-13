@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import { Client, EmbedBuilder, Events, GatewayIntentBits, REST, Routes, time } from 'discord.js'
 import { server } from '../app'
 import path from 'path'

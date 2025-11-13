@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import fastify from 'fastify'
 import fastifyStatic from '@fastify/static'
 import path from 'path'
@@ -51,8 +52,12 @@ server.get('/health', async function (request, response) {
     return { status: 'OK' }
 })
 ;(async () => {
-    await discord()
-    console.log('Discord Bot loaded.')
+    if (process.env.DISCORD_TOKEN) {
+        await discord()
+        console.log('Discord Bot loaded.')
+    } else {
+        console.log('Discord Bot token missing, not loaded.')
+    }
     const crunchy = new Crunchyroll()
     await crunchy.startRSSUpdater()
     console.log('RSS loaded.')
