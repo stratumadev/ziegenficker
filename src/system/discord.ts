@@ -68,9 +68,9 @@ export const discord = async () => {
             await message.reply('https://tenor.com/view/throw-up-dry-heave-vomit-gross-eww-gif-23254758')
         }
 
-        if (message.channelId === '884518760415916062' && message.content.toLowerCase().includes('help')) {
+        if (message.channelId === '884518760415916062' && (message.content.toLowerCase().includes('help') || message.content.toLowerCase().includes('guide'))) {
             await message.reply(
-                'Did you read the [Docs](https://github.com/anidl/multi-downloader-nx/blob/master/docs/DOCUMENTATION.md) or the [GET-STARTED](https://github.com/anidl/multi-downloader-nx/blob/master/docs/GET-STARTED.md) guide already?'
+                'Did you read the [Docs](<https://github.com/anidl/multi-downloader-nx/blob/master/docs/DOCUMENTATION.md>) or the [GET-STARTED](<https://github.com/anidl/multi-downloader-nx/blob/master/docs/GET-STARTED.md>) guide already?'
             )
 
             retardList.push(message.author.id)
