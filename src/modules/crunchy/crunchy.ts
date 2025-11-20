@@ -74,7 +74,7 @@ export default class Crunchyroll {
         const data = await this.req.fetch<CrunchyrollEpisodes>('https://www.crunchyroll.com/content/v2/discover/browse', {
             method: 'GET',
             query: {
-                n: 1000,
+                n: 5000,
                 type: 'episode',
                 sort_by: 'newly_added',
                 locale: lang,
