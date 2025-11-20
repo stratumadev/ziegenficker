@@ -54,9 +54,6 @@ server.get('/health', async function (request, reply) {
     } else {
         console.log('Discord Bot token missing, not booting discord client.')
     }
-    const crunchy = new Crunchyroll()
-    await crunchy.startRSSUpdater()
-    console.log('RSS loaded.')
     await middlewares()
     console.log('Middlewares loaded.')
     await routes()
@@ -77,4 +74,9 @@ server.get('/health', async function (request, reply) {
             console.log(`Server listening at ${address}`)
         }
     )
+
+    // Init RSS
+    const crunchy = new Crunchyroll()
+    await crunchy.startRSSUpdater()
+    console.log('RSS loaded.')
 })()
