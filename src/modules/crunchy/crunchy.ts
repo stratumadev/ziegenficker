@@ -68,7 +68,6 @@ export default class Crunchyroll {
 
     private async latestEpisodes(lang: string) {
         const auth = await this.getAuth()
-
         if (!auth) return
 
         const data = await this.req.fetch<CrunchyrollEpisodes>('https://www.crunchyroll.com/content/v2/discover/browse', {
@@ -92,7 +91,6 @@ export default class Crunchyroll {
                 keepAliveMaxTimeout: 1
             })
         })
-
         if (!data || !data.data || data.data.length === 0) return this.msg.errorConsoleLog('Failed to get latest episodes')
 
         return data.data
@@ -265,7 +263,7 @@ export default class Crunchyroll {
 
         if (lang === 'en-US' && server.discorditems) {
             await server.discorditems(
-                episodes.slice(0, 100).map((ep) => ({
+                episodes.map((ep) => ({
                     title: `${ep.episode_metadata.season_title && !ep.episode_metadata.season_title.startsWith('Season') ? ep.episode_metadata.season_title : ep.episode_metadata.series_title}${ep.episode_metadata.season_title && ep.episode_metadata.season_title.startsWith('Season') ? this.seasonNameHandler(ep.episode_metadata.season_title) : ''}${ep.episode_metadata.audio_locale && ep.episode_metadata.versions && ep.episode_metadata.versions.length !== 0 && ep.episode_metadata.versions.find((e) => e.audio_locale === ep.episode_metadata.audio_locale)?.original === false && this.langobj[ep.episode_metadata.audio_locale] && (!ep.episode_metadata.season_title || !ep.episode_metadata.season_title.includes(' Dub')) ? ' (' + this.langobj[ep.episode_metadata.audio_locale] + ' Dub)' : ''}${ep.episode_metadata.episode ? ' - Episode ' + ep.episode_metadata.episode : ''}${ep.title ? ' - ' + ep.title : ''}`,
                     url: `https://www.crunchyroll.com/watch/${ep.id}/${ep.slug_title}`,
                     released: new Date(ep.episode_metadata.premium_available_date ?? ep.episode_metadata.availability_starts ?? ep.last_public),
