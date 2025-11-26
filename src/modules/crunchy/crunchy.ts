@@ -48,12 +48,12 @@ export default class Crunchyroll {
         body.append('grant_type', 'client_id')
         body.append('device_id', '581a2c2b-526b-439f-8723-d28feb9e6685')
 
-        const auth = await this.req.fetch<CrunchyrollLogin>('https://www.crunchyroll.com/auth/v1/token', {
+        const auth = await this.req.fetch<CrunchyrollLogin>('https://beta-api.crunchyroll.com/auth/v1/token', {
             method: 'POST',
             headers: {
-                Authorization: `Basic YW55ZGF6d2F4Y2xyb2NhbndobzM6ODhnbklzdWNWLVE3c1lyWTI5dU9XX0pHbE1xeDFtQk4=`,
+                Authorization: `Basic bmR0aTZicXlqcm9wNXZnZjF0dnU6elpIcS00SEJJVDlDb2FMcnBPREJjRVRCTUNHai1QNlg=`,
                 'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
-                'User-Agent': 'Crunchyroll/ANDROIDTV/3.46.0_22275 (Android 12; en-US; SHIELD Android TV Build/SR1A.211012.001)'
+                'User-Agent': 'Crunchyroll/ANDROIDTV/3.50.0_22282 (Android 12; en-US; SHIELD Android TV Build/SR1A.211012.001)'
             },
             body: body.toString()
         })
@@ -70,7 +70,7 @@ export default class Crunchyroll {
         const auth = await this.getAuth()
         if (!auth) return
 
-        const data = await this.req.fetch<CrunchyrollEpisodes>('https://www.crunchyroll.com/content/v2/discover/browse', {
+        const data = await this.req.fetch<CrunchyrollEpisodes>('https://beta-api.crunchyroll.com/content/v2/discover/browse', {
             method: 'GET',
             query: {
                 n: 5000,
@@ -84,7 +84,7 @@ export default class Crunchyroll {
                 Pragma: 'no-cache',
                 Expires: '0',
                 Authorization: `Bearer ${auth.access_token}`,
-                'User-Agent': `Crunchyroll/ANDROIDTV/3.46.0_22275 (Android 12; en-US; SHIELD Android TV Build/SR1A.211012.001)`
+                'User-Agent': 'Crunchyroll/ANDROIDTV/3.50.0_22282 (Android 12; en-US; SHIELD Android TV Build/SR1A.211012.001)'
             },
             dispatcher: new Agent({
                 keepAliveTimeout: 1,
