@@ -150,7 +150,7 @@ export const discord = async () => {
                         })
                         .setTitle(i.title)
                         .setURL(i.url)
-                        .setDescription(i.description)
+                        .setDescription(i.description && i.description.length > 0 ? i.description : null)
                         .addFields(
                             { name: 'Episode ID', value: i.epid, inline: true },
                             { name: 'Season ID', value: i.ssid, inline: true },
