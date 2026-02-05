@@ -49,6 +49,19 @@ export const discord = async () => {
                                 name: 'count',
                                 description: 'Get number of stored content keys',
                                 type: 1
+                            },
+                            {
+                                name: 'find',
+                                description: 'Find a content key by KID',
+                                type: 1,
+                                options: [
+                                    {
+                                        name: 'kid',
+                                        description: 'Content Key ID',
+                                        type: 3,
+                                        required: true
+                                    }
+                                ]
                             }
                         ]
                     }
@@ -76,6 +89,43 @@ export const discord = async () => {
 
                 await interaction.reply({
                     embeds: [new EmbedBuilder().setColor('#00ff99').setTitle('Content Keys').setDescription(`Stored Content Keys: **${count}**`)]
+                })
+            }
+
+            if (sub === 'find') {
+                const kid = interaction.options.getString('kid', true)
+
+                const key = await ContentKey.findByPk(kid.toLowerCase()).then((data) => data?.get())
+                if (!key) {
+                    await interaction.reply({
+                        embeds: [new EmbedBuilder().setColor('#ff0000').setTitle('Not Found').setDescription(`No content key found for KID:\n\`${kid}\``)]
+                    })
+                    return
+                }
+
+                await interaction.reply({
+                    embeds: [
+                        new EmbedBuilder()
+                            .setColor('#00ff99')
+                            .setTitle('Content Key Found')
+                            .addFields(
+                                { name: 'KID', value: key.kid },
+                                { name: 'KEY', value: key.key },
+                                { name: 'Type', value: key.content_type },
+                                { name: 'Service', value: key.service },
+                                { name: 'Item', value: key.item },
+                                { name: 'Season', value: key.season && key.season.length > 0 ? key.season : '-' },
+                                { name: 'Episode', value: key.episode && key.episode.length > 0 ? key.episode : '-' },
+                                {
+                                    name: 'Resolution',
+                                    value: key.video_resolution ? `${key.video_resolution.width}x${key.video_resolution.height}` : '-'
+                                },
+                                {
+                                    name: 'Codec',
+                                    value: key.video_resolution ? (key.video_resolution.codec ?? '-') : '-'
+                                }
+                            )
+                    ]
                 })
             }
         }
