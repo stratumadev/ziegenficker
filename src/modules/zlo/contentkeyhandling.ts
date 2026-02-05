@@ -104,7 +104,9 @@ export default class ContentKeyHandling {
 
     public async createContentKey(contentkey: ContentKeyInit) {
         const contentKey = await this.findContentKey(contentkey.kid)
-        if (contentKey && contentKey.kid === contentkey.kid && contentKey.key === contentkey.key) {
+        if (contentKey && contentKey.kid === contentkey.kid && contentKey.key === contentkey.key && contentKey.content_type === 'audio' && contentkey.content_type === 'video') {
+            this.deleteContentKey(contentKey.kid)
+        } else if (contentKey && contentKey.kid === contentkey.kid && contentKey.key === contentkey.key) {
             return this.reply?.code(200).send()
         } else if (contentKey) {
             this.deleteContentKey(contentKey.kid)
