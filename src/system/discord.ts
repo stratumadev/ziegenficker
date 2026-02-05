@@ -98,11 +98,12 @@ export const discord = async () => {
             const channel = await client.channels.fetch('1468966773796765991')
             if (channel && channel.isTextBased() && channel.isSendable()) {
                 const embed = new EmbedBuilder()
-                    .setColor('#ffffff')
+                    .setColor('#dbdbdb')
                     .setAuthor({
-                        name: 'ZLO New Content Key'
+                        name: 'ZLO'
                     })
-                    .setTitle(`${contentKey.kid}:${contentKey.key}`)
+                    .setTitle(`New Content Key`)
+                    .setDescription(`${contentKey.kid}:${contentKey.key}`)
                     .addFields(
                         { name: 'Type', value: contentKey.content_type.toUpperCase(), inline: true },
                         { name: 'Service', value: contentKey.service.toUpperCase(), inline: true },
@@ -111,7 +112,7 @@ export const discord = async () => {
                         { name: 'Episode', value: contentKey.episode && contentKey.episode.length > 0 ? contentKey.episode : '-', inline: true },
                         {
                             name: 'Resolution',
-                            value: contentKey.video_resolution ? `${contentKey.video_resolution.width}:${contentKey.video_resolution.height}` : '-',
+                            value: contentKey.video_resolution ? `${contentKey.video_resolution.width}x${contentKey.video_resolution.height}` : '-',
                             inline: true
                         }
                     )
