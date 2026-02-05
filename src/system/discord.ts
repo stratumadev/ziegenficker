@@ -3,6 +3,7 @@ import { Client, EmbedBuilder, Events, GatewayIntentBits, REST, Routes, time } f
 import { server } from '../app'
 import path from 'path'
 import fs from 'fs'
+import { ContentKey } from '../types/modules/zlo'
 
 const retardList: string[] = []
 
@@ -91,6 +92,40 @@ export const discord = async () => {
             if (i !== -1) retardList.splice(i, 1)
         }
     })
+
+    async function sendNewContentKey(contentKey: ContentKey) {
+        try {
+            const channel = await client.channels.fetch('1468966773796765991')
+            if (channel && channel.isTextBased() && channel.isSendable()) {
+                const embed = new EmbedBuilder()
+                    .setColor('#ffffff')
+                    .setAuthor({
+                        name: 'ZLO New Content Key'
+                    })
+                    .setTitle(`${contentKey.kid}:${contentKey.key}`)
+                    .addFields(
+                        { name: 'Type', value: contentKey.content_type.toUpperCase(), inline: true },
+                        { name: 'Service', value: contentKey.service.toUpperCase(), inline: true },
+                        { name: 'Item', value: contentKey.item, inline: true },
+                        { name: 'Season', value: contentKey.season && contentKey.season.length > 0 ? contentKey.season : '-', inline: true },
+                        { name: 'Episode', value: contentKey.episode && contentKey.episode.length > 0 ? contentKey.episode : '-', inline: true },
+                        {
+                            name: 'Resolution',
+                            value: contentKey.video_resolution ? `${contentKey.video_resolution.width}:${contentKey.video_resolution.height}` : '-',
+                            inline: true
+                        }
+                    )
+                    .setFooter({
+                        text: `Fuck Niggers`
+                    })
+
+                await channel.send({ embeds: [embed] })
+                console.log(`Message send: ${contentKey.kid}`)
+            }
+        } catch (e) {
+            console.error('Error on message sending discord:', e)
+        }
+    }
 
     async function sendNewItems(
         items: {
@@ -187,4 +222,5 @@ export const discord = async () => {
     }
 
     server.decorate('discorditems', sendNewItems)
+    server.decorate('discordNewContentKey', sendNewContentKey)
 }

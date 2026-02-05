@@ -9,6 +9,7 @@ import { middlewares } from './system/middlewares'
 import { cronjobs } from './system/cronjobs'
 import Crunchyroll from './modules/crunchy/crunchy'
 import { discord } from './system/discord'
+import { syncDatabase } from './system/sync'
 const cache = new NodeCache({ stdTTL: 100, checkperiod: 120, useClones: false })
 
 // Startup Fastify server
@@ -52,6 +53,12 @@ server.get('/health', async function (request, reply) {
         console.log('Discord Bot loaded.')
     } else {
         console.log('Discord Bot token missing, not booting discord client.')
+    }
+    if (process.env.DATABASE_URL) {
+        await syncDatabase()
+        console.log('Database loaded.')
+    } else {
+        console.log('Database URL missing, not loaded.')
     }
     await middlewares()
     console.log('Middlewares loaded.')
