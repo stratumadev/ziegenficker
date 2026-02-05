@@ -19,5 +19,5 @@ export async function contentKeyInitHandler(
             message: 'Internal Error, please report this to the admins.'
         })
 
-    return reply.code(201)
+    return reply.code(201).send()
 }
