@@ -3,7 +3,8 @@ import { Client, EmbedBuilder, Events, GatewayIntentBits, REST, Routes, time } f
 import { server } from '../app'
 import path from 'path'
 import fs from 'fs'
-import { ContentKey } from '../types/modules/zlo'
+import { ContentKey as ContentKeyType } from '../types/modules/zlo'
+import { ContentKey } from '../database/database'
 
 const retardList: string[] = []
 
@@ -39,6 +40,17 @@ export const discord = async () => {
                     {
                         name: 'izuco',
                         description: 'See what happens when you nest if statements'
+                    },
+                    {
+                        name: 'contentkeys',
+                        description: 'Manage stored content keys',
+                        options: [
+                            {
+                                name: 'count',
+                                description: 'Get number of stored content keys',
+                                type: 1
+                            }
+                        ]
                     }
                 ]
             })
@@ -54,6 +66,18 @@ export const discord = async () => {
         if (interaction.commandName === 'izuco') {
             await interaction.reply('Scheiss If Nester')
             await interaction.followUp('https://media.discordapp.net/attachments/884517764344205333/1429508842114519170/500080178-27a7b421-aea0-4e24-93d4-65a9d51ba1d1.png')
+        }
+
+        if (interaction.commandName === 'contentkeys') {
+            const sub = interaction.options.getSubcommand()
+
+            if (sub === 'count') {
+                const count = await ContentKey.count()
+
+                await interaction.reply({
+                    embeds: [new EmbedBuilder().setColor('#00ff99').setTitle('Content Keys').setDescription(`Stored Content Keys: **${count}**`)]
+                })
+            }
         }
     })
 
@@ -93,7 +117,7 @@ export const discord = async () => {
         }
     })
 
-    async function sendNewContentKey(contentKey: ContentKey) {
+    async function sendNewContentKey(contentKey: ContentKeyType) {
         try {
             const channel = await client.channels.fetch('1468966773796765991')
             if (channel && channel.isTextBased() && channel.isSendable()) {
