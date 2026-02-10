@@ -2,7 +2,7 @@ require('dotenv').config()
 
 module.exports = {
     development: {
-        url: process.env.DATABASE_URL,
+        url: process.env.DATABASE_URL ?? 'postgres://',
         dialect: 'postgres',
         pool: {
             max: 50,
@@ -12,7 +12,7 @@ module.exports = {
         }
     },
     production: {
-        url: process.env.DATABASE_URL,
+        url: process.env.DATABASE_URL ?? 'postgres://',
         dialect: 'postgres',
         logging: false,
         pool: {
