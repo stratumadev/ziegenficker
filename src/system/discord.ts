@@ -42,6 +42,10 @@ export const discord = async () => {
                         description: 'See what happens when you nest if statements'
                     },
                     {
+                        name: 'jay',
+                        description: 'See what happens when you are a jew'
+                    },
+                    {
                         name: 'contentkeys',
                         description: 'Manage stored content keys',
                         options: [
@@ -79,6 +83,10 @@ export const discord = async () => {
         if (interaction.commandName === 'izuco') {
             await interaction.reply('Scheiss If Nester')
             await interaction.followUp('https://media.discordapp.net/attachments/884517764344205333/1429508842114519170/500080178-27a7b421-aea0-4e24-93d4-65a9d51ba1d1.png')
+        }
+        if (interaction.commandName === 'jay') {
+            await interaction.reply('<@185854698958487553> Jew')
+            await interaction.followUp('https://media.discordapp.net/attachments/1371248602760089643/1471851415549907179/iu_.png')
         }
 
         if (interaction.commandName === 'contentkeys') {
