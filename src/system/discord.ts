@@ -86,7 +86,7 @@ export const discord = async () => {
         }
         if (interaction.commandName === 'jay') {
             await interaction.reply('<@185854698958487553> Jew')
-            await interaction.followUp('https://media.discordapp.net/attachments/1371248602760089643/1471851415549907179/iu_.png')
+            await interaction.followUp('https://tenor.com/view/joo-jew-jewl-s4j78-gif-5651286586900019647')
         }
 
         if (interaction.commandName === 'contentkeys') {
