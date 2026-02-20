@@ -7,7 +7,6 @@ declare module 'fastify' {
         cache: NodeCache
         zloAuth: any
         discordclient: Client<boolean>
-        discordNewContentKey: ((contentKey: ContentKey) => Promise<void>) | undefined
         discorditems:
             | ((
                   items: {

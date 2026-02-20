@@ -113,12 +113,6 @@ export default class ContentKeyHandling {
         }
 
         const ck = await this.newContentKey(contentkey)
-
-        // Send to discord bot
-        if (ck && server.discordNewContentKey) {
-            server.discordNewContentKey(ck)
-        }
-
         return ck
     }
 

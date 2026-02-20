@@ -175,41 +175,6 @@ export const discord = async () => {
         }
     })
 
-    async function sendNewContentKey(contentKey: ContentKeyType) {
-        try {
-            const channel = await client.channels.fetch('1468966773796765991')
-            if (channel && channel.isTextBased() && channel.isSendable()) {
-                const embed = new EmbedBuilder()
-                    .setColor('#dbdbdb')
-                    .setAuthor({
-                        name: 'ZLO'
-                    })
-                    .setTitle(`New Content Key`)
-                    .setDescription(`${contentKey.kid}:${contentKey.key}`)
-                    .addFields(
-                        { name: 'Type', value: contentKey.content_type.toUpperCase(), inline: true },
-                        { name: 'Service', value: contentKey.service.toUpperCase(), inline: true },
-                        { name: 'Item', value: contentKey.item, inline: true },
-                        { name: 'Season', value: contentKey.season && contentKey.season.length > 0 ? contentKey.season : '-', inline: true },
-                        { name: 'Episode', value: contentKey.episode && contentKey.episode.length > 0 ? contentKey.episode : '-', inline: true },
-                        {
-                            name: 'Resolution',
-                            value: contentKey.video_resolution ? `${contentKey.video_resolution.width}x${contentKey.video_resolution.height}` : '-',
-                            inline: true
-                        }
-                    )
-                    .setFooter({
-                        text: `Fuck Niggers`
-                    })
-
-                await channel.send({ embeds: [embed] })
-                console.log(`Message send: ${contentKey.kid}`)
-            }
-        } catch (e) {
-            console.error('Error on message sending discord:', e)
-        }
-    }
-
     async function sendNewItems(
         items: {
             title: string
@@ -305,5 +270,4 @@ export const discord = async () => {
     }
 
     server.decorate('discorditems', sendNewItems)
-    server.decorate('discordNewContentKey', sendNewContentKey)
 }
