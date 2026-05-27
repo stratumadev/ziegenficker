@@ -51,9 +51,9 @@ export default class Crunchyroll {
         const auth = await this.req.fetch<CrunchyrollLogin>('https://beta-api.crunchyroll.com/auth/v1/token', {
             method: 'POST',
             headers: {
-                Authorization: `Basic eTJhcnZqYjBoMHJndnRpemxvdnk6SlZMdndkSXBYdnhVLXFJQnZUMU04b1FUcjFxbFFKWDI=`,
+                Authorization: `Basic bm1oaGcwbDZ4eXhjZm02aHQ2aGY6SjR6bU1mdjNkMVFkWHk4dDk2d1NjeDdoUnkzclBHLTM=`,
                 'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
-                'User-Agent': 'Crunchyroll/ANDROIDTV/3.59.0_22338 (Android 12; en-US; SHIELD Android TV Build/SR1A.211012.001)'
+                'User-Agent': 'Crunchyroll/ANDROIDTV/3.61.0_22341 (Android 12; en-US; SHIELD Android TV Build/SR1A.211012.001)'
             },
             body: body.toString()
         })
@@ -84,7 +84,7 @@ export default class Crunchyroll {
                 Pragma: 'no-cache',
                 Expires: '0',
                 Authorization: `Bearer ${auth.access_token}`,
-                'User-Agent': 'Crunchyroll/ANDROIDTV/3.50.0_22282 (Android 12; en-US; SHIELD Android TV Build/SR1A.211012.001)'
+                'User-Agent': 'Crunchyroll/ANDROIDTV/3.61.0_22341 (Android 12; en-US; SHIELD Android TV Build/SR1A.211012.001)'
             },
             dispatcher: new Agent({
                 keepAliveTimeout: 1,
