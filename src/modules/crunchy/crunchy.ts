@@ -70,30 +70,63 @@ export default class Crunchyroll {
         const auth = await this.getAuth()
         if (!auth) return
 
-        const data = await this.req.fetch<CrunchyrollEpisodes>('https://beta-api.crunchyroll.com/content/v2/discover/browse', {
-            method: 'GET',
-            query: {
-                n: 5000,
-                type: 'episode',
-                sort_by: 'newly_added',
-                locale: lang,
-                force_locale: crypto.randomUUID()
-            },
-            headers: {
-                'Cache-Control': 'no-cache, no-store, must-revalidate',
-                Pragma: 'no-cache',
-                Expires: '0',
-                Authorization: `Bearer ${auth.access_token}`,
-                'User-Agent': 'Crunchyroll/ANDROIDTV/3.61.0_22341 (Android 12; en-US; SHIELD Android TV Build/SR1A.211012.001)'
-            },
-            dispatcher: new Agent({
-                keepAliveTimeout: 1,
-                keepAliveMaxTimeout: 1
-            })
+        const page = 100
+        const maxEpisodes = 5000
+        const episodes: CrunchyrollEpisodes['data'] = []
+        const forceLocale = crypto.randomUUID()
+        const pageConcurrency = 8
+        const dispatcher = new Agent({
+            keepAliveTimeout: 1,
+            keepAliveMaxTimeout: 1
         })
-        if (!data || !data.data || data.data.length === 0) return this.msg.errorConsoleLog('Failed to get latest episodes')
 
-        return data.data
+        const fetchPage = (start: number) =>
+            this.req.fetch<CrunchyrollEpisodes>('https://beta-api.crunchyroll.com/content/v2/discover/browse', {
+                method: 'GET',
+                query: {
+                    n: page,
+                    start,
+                    type: 'episode',
+                    sort_by: 'newly_added',
+                    locale: lang,
+                    force_locale: forceLocale
+                },
+                headers: {
+                    'Cache-Control': 'no-cache, no-store, must-revalidate',
+                    Pragma: 'no-cache',
+                    Expires: '0',
+                    Authorization: `Bearer ${auth.access_token}`,
+                    'User-Agent': 'Crunchyroll/ANDROIDTV/3.61.0_22341 (Android 12; en-US; SHIELD Android TV Build/SR1A.211012.001)'
+                },
+                dispatcher
+            })
+
+        const firstPage = await fetchPage(0)
+        if (!firstPage || !firstPage.data || firstPage.data.length === 0) return this.msg.errorConsoleLog('Failed to get latest episodes')
+
+        episodes.push(...firstPage.data)
+
+        if (firstPage.data.length < page) return episodes.slice(0, maxEpisodes)
+
+        const totalEpisodes = Math.min(firstPage.total || maxEpisodes, maxEpisodes)
+        const starts: number[] = []
+        for (let start = page; start < totalEpisodes; start += page) starts.push(start)
+
+        let nextStart = 0
+        const workers = Array.from({ length: Math.min(pageConcurrency, starts.length) }, async () => {
+            while (nextStart < starts.length) {
+                const start = starts[nextStart++]
+                const data = await fetchPage(start)
+                if (!data || !data.data || data.data.length === 0) continue
+
+                episodes.push(...data.data)
+            }
+        })
+
+        await Promise.all(workers)
+
+        if (episodes.length === 0) return this.msg.errorConsoleLog('Failed to get latest episodes')
+        return episodes.slice(0, maxEpisodes)
     }
 
     private generateXMLImages(
