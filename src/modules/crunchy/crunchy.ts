@@ -3,8 +3,7 @@ import { CrunchyrollEpisodes, CrunchyrollLogin } from '../../types/modules/crunc
 import LogHandler from '../../utils/msg'
 import RequestHandler from '../../utils/req'
 import crypto from 'crypto'
-import { XMLBuilder } from 'fast-xml-parser'
-import { Agent } from 'undici'
+import XMLBuilder from 'fast-xml-builder'
 
 export default class Crunchyroll {
     private req = new RequestHandler()
@@ -75,10 +74,6 @@ export default class Crunchyroll {
         const episodes: CrunchyrollEpisodes['data'] = []
         const forceLocale = crypto.randomUUID()
         const pageConcurrency = 8
-        const dispatcher = new Agent({
-            keepAliveTimeout: 1,
-            keepAliveMaxTimeout: 1
-        })
 
         const fetchPage = (start: number) =>
             this.req.fetch<CrunchyrollEpisodes>('https://beta-api.crunchyroll.com/content/v2/discover/browse', {
@@ -97,8 +92,7 @@ export default class Crunchyroll {
                     Expires: '0',
                     Authorization: `Bearer ${auth.access_token}`,
                     'User-Agent': 'Crunchyroll/ANDROIDTV/3.61.0_22341 (Android 12; en-US; SHIELD Android TV Build/SR1A.211012.001)'
-                },
-                dispatcher
+                }
             })
 
         const firstPage = await fetchPage(0)
