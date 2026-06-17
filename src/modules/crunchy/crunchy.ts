@@ -50,9 +50,9 @@ export default class Crunchyroll {
         const auth = await this.req.fetch<CrunchyrollLogin>('https://beta-api.crunchyroll.com/auth/v1/token', {
             method: 'POST',
             headers: {
-                Authorization: `Basic bm1oaGcwbDZ4eXhjZm02aHQ2aGY6SjR6bU1mdjNkMVFkWHk4dDk2d1NjeDdoUnkzclBHLTM=`,
+                Authorization: `Basic cmpzMGx0eDBkYndrbGl3eGR6ZGY6NFY3cmYyMS1VRlhlWi01WEFkMFhfUVB3cjFndV9pMXM=`,
                 'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
-                'User-Agent': 'Crunchyroll/ANDROIDTV/3.61.0_22341 (Android 12; en-US; SHIELD Android TV Build/SR1A.211012.001)'
+                'User-Agent': 'Crunchyroll/ANDROIDTV/3.65.0_22347 (Android 12; en-US; SHIELD Android TV Build/SR1A.211012.001)'
             },
             body: body.toString()
         })
@@ -91,7 +91,7 @@ export default class Crunchyroll {
                     Pragma: 'no-cache',
                     Expires: '0',
                     Authorization: `Bearer ${auth.access_token}`,
-                    'User-Agent': 'Crunchyroll/ANDROIDTV/3.61.0_22341 (Android 12; en-US; SHIELD Android TV Build/SR1A.211012.001)'
+                    'User-Agent': 'Crunchyroll/ANDROIDTV/3.65.0_22347 (Android 12; en-US; SHIELD Android TV Build/SR1A.211012.001)'
                 }
             })
 
